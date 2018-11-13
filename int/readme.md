@@ -29,3 +29,21 @@ We either deal with amounts as :
 The 2 functions are lossless and exact transcriptions from one format to another, with no possible precision loss.
 
 Computation on the integers only ensure there is no possible precision or rounding error, ever.
+
+# Experiments and proofs
+
+Files to be put in a working bismuth node.
+
+## exp1.py
+
+Proof that mining_reward does **not** need any quantize voodoo and can be computed as defaut python float (ie: double) or derived from integer, with the exact same required .8f result.
+
+# exp2.py
+Needs a converted db, with iamount, ifee, ireward fields
+- proof that balances are strictly the same for all addresses when using integer as internal representation
+- proof that balance check code is simpler and more easily readable - still can be simplified
+- benchmark shhowing also significant speed improvement (the more the adress is used, the more the gain)
+
+
+DB conversion is straightforward, it's a series of requests like
+`update transactions2 set ireward = CAST(round(reward*100000000) AS INTEGER)`
