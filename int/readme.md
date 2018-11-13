@@ -44,8 +44,6 @@ Needs a converted db, with iamount, ifee, ireward fields
 - proof that balance check code is simpler and more easily readable - still can be simplified
 - benchmark shhowing also significant speed improvement (the more the adress is used, the more the gain)
 
+## exp3.py
 
-DB conversion is straightforward, it's a series of requests like
-`update transactions2 set ireward = CAST(round(reward*100000000) AS INTEGER)`
-
-Auto Convert script will follow.
+Proof that convert functions are bijective, and that no precision is lost when converting to INT the nback to .8f
