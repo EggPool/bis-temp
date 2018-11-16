@@ -47,3 +47,11 @@ Needs a converted db, with iamount, ifee, ireward fields
 ## exp3.py
 
 Proof that convert functions are bijective, and that no precision is lost when converting to INT the nback to .8f
+
+## exp4.py
+
+Check wether diff needs decimals (does not)
+
+## exp5.py
+
+Check wether diff drop needs decimals (needs .2f rounding to stay compatible with current values, would not need if rounding ois removed after a HF)
