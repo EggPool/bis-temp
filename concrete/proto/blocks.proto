@@ -1,0 +1,49 @@
+syntax = "proto2";
+
+package bismuth;
+
+// version 0.0.1
+
+// A single tx - timestamp,address,recipient,amount,signature,public_key,operation,openfield
+message TX {
+    // Timestamp, sec * 100 - string because decimal fixed precision
+    required uint64 timestamp=1;
+    // index of sender address
+    required uint32 address_index=2;
+    // index of recipient address
+    required uint32 recipient_index=3;
+    // amount
+    required uint64 amount=4;
+    //
+    required bytes signature=5;
+    // No need for pubkey, derived from address. pubkey index = address index.
+    //
+    required string operation=6;
+    //
+    required string openfield=7;
+}
+
+// A pos block with txs
+message Block {
+    repeated TX txs=1;
+}
+
+message Address {
+    // String and not bytes because of upcoming schemes
+    required string address=1;
+}
+
+message Pubkey {
+    required bytes pubkey=1;
+}
+
+
+message Blocks {
+    required uint32 from_block=1;
+    required uint32 to_block=2;
+    // index of addresses, sender first then recipients
+    repeated Address addresses = 3;
+    // pubkeys dictionnary (list in fact)
+    repeated Pubkey pubkeys = 4;
+    repeated Block blocks = 5;
+}
