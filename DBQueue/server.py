@@ -1,7 +1,6 @@
 import threading
 import socketserver
 import time
-import os
 from queue import Queue
 
 from connections import send, receive
@@ -102,9 +101,7 @@ def db_thread_loop():
             with open("storeB.txt", "a") as f:
                 f.write(f"{item[1]}\n")
             DB_QUEUE.task_done()
-            print(item[1], time.time())
             time.sleep(DELAY)
-            print(item[1], time.time())
             # Send the data back to the provided queue
             item[0].put(time.time())
         except:
@@ -141,10 +138,6 @@ if __name__ == "__main__":
     server_thread.start()
 
     print("Status: Server loop running.")
-
-    db_thread = threading.Thread(target=db_thread_loop)
-    db_thread.daemon = True
-    db_thread.start()
 
     while True:
         time.sleep(1)
