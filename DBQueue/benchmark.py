@@ -5,12 +5,13 @@ import threading
 
 NUM = 20
 
+
 def do_A(index: int):
     s = socket()
     s.settimeout(10)
     s.connect(("127.0.0.1", 5555))
-    connections.send (s, "storeA")
-    connections.send (s, index)
+    connections.send(s, "storeA")
+    connections.send(s, index)
     res = connections.receive(s)
     print(res)
 
@@ -19,8 +20,8 @@ def do_B(index: int):
     s = socket()
     s.settimeout(10)
     s.connect(("127.0.0.1", 5555))
-    connections.send (s, "storeB")
-    connections.send (s, index)
+    connections.send(s, "storeB")
+    connections.send(s, index)
     res = connections.receive(s)
     print(res)
 
