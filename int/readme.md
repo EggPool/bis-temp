@@ -39,10 +39,14 @@ Files to be put in a working bismuth node.
 Proof that mining_reward does **not** need any quantize voodoo and can be computed as default python float (ie: double) or derived from integer, with the exact same required .8f result.
 
 ## exp2.py
-Needs a converted db, with iamount, ifee, ireward fields
+
+Needs a converted db, with "transaction2" table and iamount, ifee, ireward fields (see create_transactions2.py)
+
 - proof that balances are strictly the same for all addresses when using integer as internal representation
 - proof that balance check code is simpler and more easily readable - still can be simplified
 - benchmark showing also significant speed improvement (the more the address is used, the more the gain)
+
+(copy to Bismuth dir)
 
 ## exp3.py
 
@@ -55,3 +59,18 @@ Checks whether diff needs decimals (does not)
 ## exp5.py
 
 Check whether diff drop needs decimals (needs .2f rounding to stay compatible with current values, would not need if rounding is removed after a HF)
+
+## create_transactions2.py
+
+Converts a current ledger.db into a new test format.
+In fact, adds an extra "transactions2" table, cloned from transactions, with a few changes:
+- all amounts are converted and stored as integer
+- an extra 'tx4' indexed filed is added, with 4 first chars of the signature.  
+This is to greatly speed up individual tx lookups 
+- only 3 indices are setup to limit overweight
+
+- start from a clean ledger.db, vacuum to thereis no extra .wal, .shm files.
+- copy the db to ledgeri.db
+- run the script to convert (copy to Bismuth dir)
+
+Do not run on a working node, or the transactions/transactions2 will not be in sync and tests will fail.
