@@ -12,7 +12,7 @@ from quantizer import *
 from random import shuffle
 
 # Check every single address balance one by one.
-DO_CHECK = True
+DO_CHECK = False
 
 # Speed benchmark on all addresses, but no check
 DO_BENCH1 = False
@@ -50,13 +50,13 @@ config.read()
 ledger_path_conf = "static/ledgeri.db"
 
 
-
 def db_h_define():
     hdd = sqlite3.connect(ledger_path_conf, timeout=1)
     hdd.text_factory = str
     h = hdd.cursor()
     hdd.execute("PRAGMA page_size = 4096;")
     return hdd, h
+
 
 def commit(cursor):
     """Secure commit for slow nodes"""
@@ -195,8 +195,6 @@ def bench(addresses):
 
 
 if __name__ == "__main__":
-    # Hyper
-    # hdd2, h2 = db_h2_define()
     # Ledger
     hdd, h = db_h_define()
     ERRORS = 0
@@ -212,21 +210,17 @@ if __name__ == "__main__":
         check(result)
         print("Done, {} Errors.".format(ERRORS))
 
+    if DO_BENCH1:
+        bench(result)
+        sys.exit()
 
-
-    """
-    # uncomment to benchmark
-    bench(result)
-    sys.exit()
-    """
-
-
-    # benchmark: top 100 largest addresses, 20 times each
-    execute(h, ("SELECT distinct(recipient) FROM transactions group by recipient order by count(*) DESC limit 100"))
-    result = h.fetchall()
-    temp = []
-    for address in result:
-        temp.append(address * 20)
-    shuffle(temp)
-    bench(temp)
+    if DO_BENCH2:
+        # benchmark: top 100 largest addresses, 20 times each
+        execute(h, ("SELECT distinct(recipient) FROM transactions group by recipient order by count(*) DESC limit 100"))
+        result = h.fetchall()
+        temp = []
+        for address in result:
+            temp.append(address * 20)
+        shuffle(temp)
+        bench(temp)
 
