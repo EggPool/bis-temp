@@ -31,15 +31,12 @@ SQL_INDICES = [
     "CREATE INDEX `Recipient_Index` ON `transactions2` (`recipient`, `iamount`, `ireward`)",
     "CREATE INDEX `Address_Index` ON `transactions2` (`address`, `iamount`, `ifee`)",
     "CREATE INDEX `tx4_Index` ON `transactions2` (`tx4`)",
-    # Maybe a "hash4" or "hash8" indexed field could help reduce the size, avoiding a block_hash index. Bench todo
+    # Maybe a "hash4" indexed field could help reduce the size, avoiding a block_hash index. done, yes.
     # better: store block hash as bin, storage and index/2
     # then hash2 to 4 would be enough (and just a big int - int in sqlite are up to 8 bytes long)
-    # select count(*) as nb from transactions2 group by bhash4 order by nb desc limit 100;
-    # Still 114 res per bhash4 => move to 8 ?
     # ninja option: store hash as bin, and split over 2 columns.
-    # First one is 4 or 6 bytes, indexed. Second one remaining 24 or 22 bytes, non indexed, as Blob
+    # First one is 4, indexed. Second one remaining 24 bytes, non indexed, as Blob
     # there are no aggregate ops on hash, only lookup of a single one. So no covering index is needed.
-    # (6 not 8 because of 8 bytes unsigned int too large for sqlite - TODO: Triple check with X'FFFFFFFFFFFF', or 7 x'FFFFFFFFFFFFFF'?)
     # select count(*) as nb from transactions2 group by bhash4 order by nb desc limit 10;
     # 2 res at 10 per bhash4, 1 from around 200
 ]
